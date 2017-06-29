@@ -34,6 +34,56 @@ var infile *string = flag.String("i", "infile", "File contains value for sorting
 var outfile *string = flag.String("o", "outfile", "File to receive sorted value")
 var algorithm *string = flag.String("a", "qsort", "Sort algorithm")
 
+func readValues(infile string) (values []int, err error) {
+	//打开infile文件
+	file, err := os.Open(infile)
+	if err != nil {
+		//打开文件失败
+		fmt.Println("Failed to open the inputfile", infile)
+		return
+	}
+	//确保关闭文件句柄
+	defer file.Close()
+
+	//读取文件
+	br := bufio.NewReader(file)
+
+	//创建一个长度为0的切片数组
+	values = make([]int, 0)
+
+	//一行一行解析数组里面的内容
+	for {
+		//逐行读取文件
+		line, isPrefix, err1 := br.ReadLine()
+
+		if err1 != nil {
+			//当读到了 end of file帧后 不返回err 而直接返回nil 表示读取正常
+			if err1 != io.EOF {
+				err = err1
+			}
+			break
+		}
+
+		if isPrefix {
+			fmt.Println("A too long line, seems unexpected") //缓冲溢出
+		}
+
+		//将读到的字符串一步步转化为数组
+		str := string(line) //转换字符数组为字符串
+
+		value, err1 := strconv.Atoi(str)
+
+		if err1 != nil {
+			err = err1
+			return
+		}
+
+		values = append(values, value) //放到values里面
+	}
+	return
+
+}
+
 func main() {
 	//解析命令行
 	flag.Parse()
@@ -41,5 +91,13 @@ func main() {
 	if infile != nil {
 		fmt.Println("infile =", *infile, "outfile =", *outfile, "algorithm =",
 			*algorithm)
+	}
+
+	values, err := readValues(*infile)
+
+	if err == nil {
+		fmt.Println("Read values:", values)
+	} else {
+		fmt.Println(err)
 	}
 }
