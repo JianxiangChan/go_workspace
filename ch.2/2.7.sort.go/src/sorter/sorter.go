@@ -29,6 +29,16 @@ import "os"
 //基本字符串类型的转换包
 import "strconv"
 
+//go语言的time包
+//组成
+//time.Duration（时长，耗时）
+//time.Time（时间点）
+//time.C（放时间点的管道）
+import "time"
+
+import "algorithms/bubblesort"
+import "algorithms/quicksort"
+
 //对输入的命令格式定义
 var infile *string = flag.String("i", "infile", "File contains value for sorting")
 var outfile *string = flag.String("o", "outfile", "File to receive sorted value")
@@ -116,10 +126,24 @@ func main() {
 	values, err := readValues(*infile)
 
 	if err == nil {
-		fmt.Println("Read values:", values)
+		//fmt.Println("Read values:", values)
+		t1 := time.Now()
+		//判断排序方法
+		switch *algorithm {
+		case "quicksort":
+			quicksort.QuickSort(values)
+		case "bubblesort":
+			bubblesort.BubbleSort(values)
+		default:
+			fmt.Println("Sorting algorithm", *algorithm, "is either unknow or unsupported.")
+		}
+		t2 := time.Now()
+
+		fmt.Println("The sorting process costs", t2.Sub(t1), "to complete.")
+
+		writeValues(values, *outfile)
 	} else {
 		fmt.Println(err)
 	}
 
-	writeValues(values, *outfile)
 }
