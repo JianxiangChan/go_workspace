@@ -80,8 +80,28 @@ func readValues(infile string) (values []int, err error) {
 
 		values = append(values, value) //放到values里面
 	}
-	return
 
+	return
+}
+
+func writeValues(values []int, outfile string) error {
+	//创建一个以outfile为名字的dat
+	file, err := os.Create(outfile)
+
+	if err != nil {
+		fmt.Println("failed to creat the output file", outfile)
+		return err
+	}
+
+	defer file.Close()
+
+	//将数组转化为字符串然后末尾换行写入到outfile
+	for _, value := range values {
+		str := strconv.Itoa(value)
+		file.WriteString(str + "\n")
+	}
+
+	return nil
 }
 
 func main() {
@@ -100,4 +120,6 @@ func main() {
 	} else {
 		fmt.Println(err)
 	}
+
+	writeValues(values, *outfile)
 }
