@@ -22,10 +22,10 @@ type LessAdder interface {
 	Add(b Integer)
 }
 
-var a Integer = 1
+//var a Integer = 1
 
 //1.将对象实例赋值给接口
-var b LessAdder = &a
+//var b LessAdder = &a
 
 //这里会编译错误 因为这里的add不会自动生成一个 func (a Integer)Add(b Integer)
 //var b LessAdder = a

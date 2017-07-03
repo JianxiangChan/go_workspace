@@ -116,6 +116,7 @@ func writeValues(values []int, outfile string) error {
 }
 
 func main() {
+
 	//解析命令行
 	flag.Parse()
 
