@@ -1,6 +1,7 @@
 package mlib
 
 import "errors"
+import "fmt"
 
 type MusicEntry struct {
 	Id     string
@@ -20,7 +21,7 @@ func NewMusicManger() *MusicManger {
 }
 
 //返回对象长度
-func (m *MusicManger) len() int {
+func (m *MusicManger) Len() int {
 	return len(m.musics)
 }
 
@@ -33,17 +34,17 @@ func (m *MusicManger) Get(index int) (music *MusicEntry, err error) {
 }
 
 //寻找对象里面某个成员
-func (m *MusicManger) Find(name string) *MusicEntry {
+func (m *MusicManger) Find(name string) (index int, a *MusicEntry) {
 	if len(m.musics) == 0 {
-		return nil
+		return -1, nil
 	}
 
-	for _, m := range m.musics {
+	for index, m := range m.musics {
 		if m.Name == name {
-			return &m
+			return index, &m
 		}
 	}
-	return nil
+	return -1, nil
 }
 
 //对象成员添加信息
@@ -59,6 +60,16 @@ func (m *MusicManger) Remove(index int) *MusicEntry {
 	removedMusic := &m.musics[index]
 	//打散以后传递
 	m.musics = append(m.musics[:index], m.musics[index+1:]...)
-
 	return removedMusic
+}
+
+func (m *MusicManger) RemoveByName(name string) *MusicEntry {
+	index, fm := m.Find(name)
+	if fm == nil {
+		fmt.Println("can not found", name)
+		return nil
+	} else {
+		return m.Remove(index)
+	}
+
 }

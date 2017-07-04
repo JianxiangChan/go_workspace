@@ -2,25 +2,31 @@ package main
 
 import "fmt"
 
+//定义一个Integer类
 type Integer int
 
+//less方法
 func (a Integer) less(b Integer) bool {
 	return a < b
 }
 
+//add方法
 func (a *Integer) Add(b Integer) {
 	*a += b
 }
 
+//modify方法
 func (a *Integer) Modify(b Integer) {
 	*a += b
 }
 
+//定义一个Rect类
 type Rect struct {
 	x, y          float64
 	width, height float64
 }
 
+//Area方法
 func (r *Rect) Area() float64 {
 	return r.width * r.height
 }
@@ -28,6 +34,8 @@ func (r *Rect) Area() float64 {
 func main() {
 
 	//3.1.1 为类型添加方法
+
+	//实例化类
 	var a Integer = 1
 	if a.less(2) {
 		fmt.Println(a, "Less 2")
